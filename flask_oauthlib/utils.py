@@ -1,8 +1,8 @@
 # coding: utf-8
 
-import base64
+import base64, sys
 from flask import request, Response
-from oauthlib.common import to_unicode, bytes_type
+from oauthlib.common import to_unicode
 
 
 def _get_uri_from_request(request):
@@ -41,6 +41,13 @@ def to_bytes(text, encoding='utf-8'):
     """Make sure text is bytes type."""
     if not text:
         return text
+    PY3 = sys.version_info[0] == 3
+    if PY3:
+        unicode_type = str
+        bytes_type = bytes
+    else:
+        unicode_type = unicode
+        bytes_type = str    
     if not isinstance(text, bytes_type):
         text = text.encode(encoding)
     return text
